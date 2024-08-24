@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: tinyproxy
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: tinyproxy:latest
+  source:
+    type: Git
+    contextDir: /
+    git:
+      uri: https://github.com/larsks/tinyproxy-image
+      ref: main
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Containerfile
+    type: Docker
+  successfulBuildsHistoryLimit: 3
+  failedBuildsHistoryLimit: 3
+  triggers:
+  - type: ConfigChange
+  - type: GitHub
+    github:
+      secretReference:
+        name: "github-webhook-secret"

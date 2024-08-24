@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyproxy
+  annotations:
+    image.openshift.io/triggers: |
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "tinyproxy:latest"
+          },
+          "fieldPath": "spec.template.spec.containers[?(@.name==\"tinyproxy\")].image"
+        }
+      ]
+
+spec:
+  template:
+    spec:
+      containers:
+      - name: tinyproxy
+        image: tinyproxy:latest
+        ports:
+        - containerPort: 8888
+          name: http
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
