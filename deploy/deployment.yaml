@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyproxy
+spec:
+  template:
+    spec:
+      containers:
+      - name: tinyproxy
+        image: ghcr.io/larsks/kube-tinyproxy:main
+        ports:
+        - containerPort: 8888
+          name: http
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
